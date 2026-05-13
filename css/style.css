@@ -588,3 +588,27 @@ pre {
     width: 100%;
   }
 }
+
+.active-regex-pill {
+  display: inline-flex;
+  align-items: center;
+
+  max-width: 160px;
+  padding: 10px 14px;
+  border-radius: 12px;
+
+  background: #fff7fb;
+  border: 1px solid #f4bfd6;
+
+  color: #4a2d43;
+  font-size: 14px;
+  font-weight: 800;
+
+  overflow: hidden;
+}
+
+.active-regex-pill span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

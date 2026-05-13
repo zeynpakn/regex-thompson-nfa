@@ -548,6 +548,12 @@ function renderTransitionTable(nfa) {
 
 async function convertRegex() {
   const regexInput = document.getElementById("regexInput").value.trim();
+  const activeRegexValue = document.getElementById("activeRegexValue");
+
+  if (activeRegexValue) {
+    activeRegexValue.textContent = regexInput || "-";
+  }
+
   const errorDiv = document.getElementById("error");
   const stepsDiv = document.getElementById("steps");
 
