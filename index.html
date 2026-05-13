@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Thompson Regex to ε-NFA</title>
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+
+  <script src="https://cdn.jsdelivr.net/npm/viz.js@2.1.2/viz.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/viz.js@2.1.2/full.render.js"></script>
+</head>
+
+<body>
+  <div class="page">
+
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Automata Theory Project</p>
+        <h1>Regex to Thompson ε-NFA Converter</h1>
+        <p class="hero-text">
+          Verilen düzenli ifadeyi Thompson algoritması ile adım adım boşluk geçişli NFA yapısına dönüştürür.
+        </p>
+      </div>
+
+      <nav class="top-tabs">
+        <button id="editorTabBtn" class="top-tab-button active" onclick="openMainTab('editorTab')">
+          Regex Editor
+        </button>
+
+        <button id="simulationTabBtn" class="top-tab-button" onclick="openMainTab('simulationTab')">
+          Simulation
+        </button>
+
+        <button id="transitionsTabBtn" class="top-tab-button" onclick="openMainTab('transitionsTab')">
+          Transitions
+        </button>
+      </nav>
+    </header>
+
+    <main class="layout">
+
+      <div id="editorTab" class="main-tab-content active">
+
+        <section class="card input-card">
+          <h2>Regex Girişi</h2>
+
+          <p class="helper-text">
+            Desteklenen operatörler:
+            <span>|</span> union,
+            <span>*</span> Kleene star,
+            <span>()</span> grouping,
+            yan yana yazım ise concatenation kabul edilir.
+          </p>
+
+          <div class="input-area">
+            <input
+              id="regexInput"
+              value="111(0|1)*"
+              placeholder="Örnek: (a|b)*abb"
+            />
+
+            <button onclick="convertRegex()">
+              Convert
+            </button>
+          </div>
+
+          <div class="examples">
+            <button onclick="setExample('111(0|1)*')">111(0|1)*</button>
+            <button onclick="setExample('(a|b)*abb')">(a|b)*abb</button>
+            <button onclick="setExample('a(b|c)*')">a(b|c)*</button>
+          </div>
+
+          <div class="file-upload-box">
+            <div>
+              <h3>Dosyadan Regex Yükle</h3>
+              <p>
+                <b>.txt</b> dosyasında direkt regex yazabilir.
+                <br />
+                <b>.json</b> dosyasında ise <code>{"regex": "111(0|1)*"}</code> formatı kullanılabilir.
+              </p>
+            </div>
+
+            <label class="file-upload-label">
+              Dosya Seç
+              <input
+                type="file"
+                id="regexFileInput"
+                accept=".txt,.json"
+                onchange="loadRegexFromFile(event)"
+              />
+            </label>
+          </div>
+
+          <div id="fileInfo" class="file-info"></div>
+
+          <div id="error" class="error"></div>
+        </section>
+
+        <section class="card">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow small">Step by Step</p>
+              <h2>Thompson Adımları</h2>
+            </div>
+          </div>
+
+          <div class="step-navigator">
+            <button onclick="previousStep()">← Geri</button>
+            <span id="stepCounter">Adım 0 / 0</span>
+            <button onclick="nextStep()">İleri →</button>
+          </div>
+
+          <div id="steps" class="steps"></div>
+        </section>
+
+      </div>
+
+      <div id="simulationTab" class="main-tab-content">
+
+        <section class="card">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow small">Simulation</p>
+              <h2>Girilen String NFA Tarafından Kabul Ediliyor mu?</h2>
+            </div>
+          </div>
+
+          <div class="input-area">
+            <input
+              id="testStringInput"
+              value="11101"
+              placeholder="Test edilecek string giriniz..."
+            />
+
+            <button onclick="simulateInputString()">
+              Simüle Et
+            </button>
+          </div>
+
+          <div id="simulationResult" class="simulation-result"></div>
+
+          <div class="simulation-graph-title">
+            Simülasyon Üzerinde NFA Takibi
+          </div>
+
+          <div id="simulationGraph" class="graph-box"></div>
+
+          <div class="step-navigator">
+            <button onclick="previousSimulationStep()">← Geri</button>
+            <span id="simulationStepCounter">Adım 0 / 0</span>
+            <button onclick="nextSimulationStep()">İleri →</button>
+          </div>
+
+          <div id="simulationSteps"></div>
+        </section>
+
+      </div>
+
+      <div id="transitionsTab" class="main-tab-content">
+
+        <section class="card">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow small">Transitions</p>
+              <h2>NFA Bilgileri ve Geçiş Tablosu</h2>
+            </div>
+          </div>
+
+          <div class="nfa-summary-layout">
+            <div id="nfaStats" class="stats-grid"></div>
+
+            <div class="transition-table-wrapper">
+              <table class="transition-table">
+                <thead>
+                  <tr>
+                    <th>From State</th>
+                    <th>Symbol</th>
+                    <th>To State</th>
+                  </tr>
+                </thead>
+
+                <tbody id="transitionTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
